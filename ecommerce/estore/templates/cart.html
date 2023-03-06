@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_title %}Shopping Cart{% endblock head_title %}
+
+{% block extra_head %}
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5 pt-4">
+    <h5>Cart items</h5>
+    <p>You have {{ order_item_count }} item(s) in your cart</p>
+    {% if order_items %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order_items %}
+            <tr>
+              <td><img src="{% static 'images/' %}{{ item.item.image }}" width="100px" height="100px" alt="{{ item.item.title }}" height="100"></td>
+              <td>{{ item.item.title }}</td>
+              <td>${{ item.item.price }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>
+                <form action="{% url 'remove_from_cart' item.item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                        </svg>
+                    </button>
+                </form>
+            </td>
+            
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p>Total: ${{ order.get_total_price }}</p>
+      <a href="{% url 'checkout' %}" class="btn btn-primary">Place Order</a>
+    {% else %}
+      <p>Your cart is empty</p>
+    {% endif %}
+  </div>
+  <a href="{% url 'item-list' %}" class="btn btn-link" style=" margin-right: 100px; float: right; border: 1px solid orange; background-color: orangered; padding: 1px 4px; color: white; font-weight: bold;">Continue Shopping</a>
+  </div>
+{% endblock %}

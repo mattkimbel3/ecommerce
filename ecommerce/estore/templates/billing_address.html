@@ -1,0 +1,21 @@
+<form method="post" action="{% url 'update_billing_address' %}">
+    {% csrf_token %}
+    <label for="street_address">Street address:</label>
+    <input type="text" name="street_address" value="{{ billing_address.street_address }}">
+    <br>
+    <label for="apartment_address">Apartment address:</label>
+    <input type="text" name="apartment_address" value="{{ billing_address.apartment_address }}">
+    <br>
+    <label for="countries">Country:</label>
+    <select name="countries" multiple>
+      {% for country in billing_address.countries %}
+      <option value="{{ country.code }}" {% if country in billing_address.countries.all %}selected{% endif %}>{{ country.name }}</option>
+      {% endfor %}
+    </select>
+    <br>
+    <label for="zip_code">ZIP code:</label>
+    <input type="text" name="zip_code" value="{{ billing_address.zip_code }}">
+    <br>
+    <button type="submit">Update</button>
+  </form>
+  
